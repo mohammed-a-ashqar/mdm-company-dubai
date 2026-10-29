@@ -86,7 +86,7 @@
                             <div class="row">
                                 <div class="mb-3 col-md-3">
                                     <label for="discount" class="form-label">Price</label>
-                                    <input type="number" name="price"
+                                    <input type="number" step="0.01" min="0" name="price"
                                         class="form-control {{ $errors->has('discount') ? 'is-invalid' : '' }}"
                                         value="{{ old('discount') }}" id="discount">
                                     @error('price')
