@@ -18,6 +18,10 @@
                 <p><b>TRN: {{ $invoiceName->company->trn }}</b></p>
             @endif
 
+            @if ($invoiceName->notes)
+                <p><b>{!! nl2br(e($invoiceName->notes)) !!}</b></p>
+            @endif
+
             @if ($invoiceName->company->address)
                 <p><b>Address: {{ $invoiceName->company->address }}</b></p>
             @endif

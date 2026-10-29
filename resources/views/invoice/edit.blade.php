@@ -107,6 +107,14 @@
                             </div>
                         </div>
 
+                        <div class="col-lg-12 mt-3 mb-3">
+                            <label for="notes" class="form-label">Notes <small class="text-muted">(optional &mdash; e.g. PO # NC_AESTHETICA_PO094)</small></label>
+                            <textarea name="notes" id="notes" rows="2" maxlength="500" class="form-control">{{ old('notes', $invoice->notes) }}</textarea>
+                            @error('notes')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
                         <button type="submit" class="btn btn-primary waves-effect waves-light">Update</button>
 
                     </form>

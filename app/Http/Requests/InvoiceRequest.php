@@ -28,6 +28,7 @@ class InvoiceRequest extends FormRequest
             'company_id' => 'required|integer|exists:companies,id',
             'from' => 'required|date',
             'to' => 'required|date|after_or_equal:from',
+            'notes' => 'nullable|string|max:500',
         ];
     }
 

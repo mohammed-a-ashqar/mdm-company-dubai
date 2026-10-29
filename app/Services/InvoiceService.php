@@ -74,6 +74,7 @@ public function store($request)
         'to' => $request->to,
         'invoice_number' => $invoiceNumber,
         'status' => $request->status,
+        'notes' => $request->notes,
         'date_of_create' => Carbon::now(),
     ]);
 
@@ -91,6 +92,7 @@ public function store($request)
             'to' => $request->to,
             'invoice_number' => $invoice->invoice_number, // preserve existing number
             'status' => $request->status,
+            'notes' => $request->notes,
             'date_of_create' => $invoice->date_of_create, // preserve original creation date
         ]);
         return $invoice;

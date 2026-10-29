@@ -12,7 +12,7 @@ use Illuminate\Support\Carbon;
 class Invoice extends Model
 {
     use HasFactory;
-    protected $fillable = ['company_id', 'from','to', 'date_of_create' , 'invoice_number', 'status'];
+    protected $fillable = ['company_id', 'from','to', 'date_of_create' , 'invoice_number', 'status', 'notes'];
 
     public function scopeForCompany(Builder $query, ?int $companyId): Builder
     {
