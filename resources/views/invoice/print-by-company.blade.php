@@ -4,17 +4,9 @@
 @endsection
 
 @section('css')
+    @include('invoice.designs.classic-styles')
     <style>
-        .table-bordered>:not(caption)>*>* {
-            border-width: 1px !important;
-        }
-
-        .aaa {
-            background-color: #1f628e !important;
-            color: white !important;
-            font-weight: normal !important;
-            font-size: 9px !important;
-        }
+        @page { size: A4; margin: 12mm 11mm 14mm; }
 
         .print-invoice-block {
             margin-bottom: 2rem;
@@ -23,12 +15,13 @@
         }
 
         @media print {
-            .aaa {
-                font-size: 9px !important;
-            }
-
-            body {
-                font-family: Arial, sans-serif;
+            body,
+            .content-page,
+            .content,
+            .container-fluid {
+                margin: 0 !important;
+                padding: 0 !important;
+                background: #fff !important;
             }
 
             .d-print-none {
@@ -44,22 +37,6 @@
 
             .print-invoice-block:last-child {
                 page-break-after: auto;
-            }
-
-            .table-bordered th,
-            .table-bordered td {
-                border: 1px solid #000000 !important;
-                padding: 8px !important;
-            }
-
-            .table th,
-            .table td {
-                font-size: 8px !important;
-            }
-
-            .product-name-cell {
-                font-size: 8px !important;
-                width: 287px !important;
             }
         }
     </style>

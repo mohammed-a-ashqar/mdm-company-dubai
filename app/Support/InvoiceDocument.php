@@ -13,7 +13,23 @@ use Illuminate\Support\Collection;
  */
 class InvoiceDocument
 {
-    public static function make(Invoice $invoice, Collection $products): array
+    /**
+     * The "3-page layout": 2 products, then 1 product, then the rest, each page with its own totals.
+     * Pages with no products are skipped.
+     */
+    public static function pages(Invoice $invoice, Collection $products): array
+    {
+        $products = $products->values();
+
+        return collect([[0, 2], [2, 1], [3, null]])
+            ->map(fn ($part) => [$part[0], $products->slice($part[0], $part[1])])
+            ->filter(fn ($part) => $part[1]->isNotEmpty())
+            ->map(fn ($part) => self::make($invoice, $part[1], $part[0]))
+            ->values()
+            ->all();
+    }
+
+    public static function make(Invoice $invoice, Collection $products, int $rowStart = 0): array
     {
         $company = $invoice->company;
         $companyDisc = (float) ($company->discount ?? 0);
@@ -35,7 +51,7 @@ class InvoiceDocument
             $total = $taxable + $vat;
 
             $lines[] = [
-                'no' => $i + 1,
+                'no' => $rowStart + $i + 1,
                 'name' => $p->name,
                 'qty' => $qty,
                 'free' => $free,
@@ -75,6 +91,7 @@ class InvoiceDocument
             'period_from' => self::date($invoice->from),
             'period_to' => self::date($invoice->to),
             'status' => strtolower((string) $invoice->status),
+            'notes' => $invoice->notes,
             'customer' => [
                 'name' => $company->name,
                 'trn' => $company->trn,

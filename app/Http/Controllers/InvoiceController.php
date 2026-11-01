@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 
 use App\Services\CompanyService;
 use App\Services\InvoiceService;
+use App\Support\InvoiceDocument;
 use App\Http\Requests\InvoiceRequest;
 use Barryvdh\Snappy\Facades\SnappyPdf;
 use App\Http\Requests\UpdateInvoiceRequest;
@@ -124,32 +125,12 @@ class InvoiceController extends Controller
 
             $products  = $this->invoiceService->show($id);
             $invoiceName = Invoice::where('id' , $id)->with(['company'])->first();
-        // Fetch all products that belong to this invoice's company
-        // $products  = Product::where('company_id', $invoiceName->company->id)->get();
 
-        $totalWithVatAndDiscount = $products->sum(function ($product) {
-            return $product->getPriceWithVatAndDiscount();
-        });
-        $totalWithVat = $products->sum(function ($product) {
-            return $product->getPriceWithVat(); // Assuming this method is defined to calculate price with VAT
-        });
-
-
-        $totalTotal = $products->sum(function ($product) use ($invoiceName) {
-            $companyDisc = (float) ($invoiceName->company->discount ?? 0);
-            $productPriceWithDiscont = $product->linePriceAfterDiscount($companyDisc);
-
-            return $productPriceWithDiscont + ($productPriceWithDiscont * $product->vat / 100);
-        });
-
-return  view('invoice.show', [
-            'products'=>$products
-          , 'invoiceName'=>$invoiceName
-         ,'totalWithVat'=>$totalWithVat
-            ,'totalWithVatAndDiscount'=>$totalWithVatAndDiscount
-            ,'totalTotal'=>$totalTotal
-            ,'multiPagePrint' => request()->boolean('multi_print'),
-      ]);
+        return view('invoice.show', [
+            'invoiceName' => $invoiceName,
+            'doc' => InvoiceDocument::make($invoiceName, $products),
+            'pages' => InvoiceDocument::pages($invoiceName, $products),
+        ]);
     }
 
 
@@ -178,46 +159,27 @@ return  view('invoice.show', [
         $products = $this->invoiceService->show($id);
         $invoiceName = Invoice::where('id', $id)->with(['company'])->first();
 
-        $totalWithVatAndDiscount = $products->sum(function ($product) {
-            return $product->getPriceWithVatAndDiscount();
-        });
-        $totalWithVat = $products->sum(function ($product) {
-            return $product->getPriceWithVat(); // Assuming this method is defined to calculate price with VAT
-        });
-
-        // Same grand total formula used by the preview page (invoice.show)
-        $totalTotal = $products->sum(function ($product) use ($invoiceName) {
-            $companyDisc = (float) ($invoiceName->company->discount ?? 0);
-            $productPriceWithDiscont = $product->linePriceAfterDiscount($companyDisc);
-
-            return $productPriceWithDiscont + ($productPriceWithDiscont * $product->vat / 100);
-        });
-
         $html = view('invoice.download', [
-            'products' => $products,
-            'invoiceName' => $invoiceName,
-            'totalWithVat' => $totalWithVat,
-            'totalWithVatAndDiscount' => $totalWithVatAndDiscount,
-            'totalTotal' => $totalTotal,
+            'doc' => InvoiceDocument::make($invoiceName, $products),
         ])->render();
 
         // Check if HTML is generated correctly
         \Log::info("HTML content generated");
 
-        // Initialize mPDF so the output matches the browser print of the
-        // preview page: US Letter, ~10mm page margins plus the 24px card
-        // offset, and the same Roboto font the preview is rendered with.
+        // Same page geometry as the browser print of the preview page (A4).
         try {
             $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
             $fontData = (new \Mpdf\Config\FontVariables())->getDefaults()['fontdata'];
 
             $mpdf = new \Mpdf\Mpdf([
                 'mode' => 'utf-8',
-                'format' => 'Letter',
-                'margin_left' => 16.4,
-                'margin_right' => 16.14,
-                'margin_top' => 10.05,
-                'margin_bottom' => 10.05,
+                'format' => 'A4',
+                'margin_left' => 11,
+                'margin_right' => 11,
+                'margin_top' => 12,
+                'margin_bottom' => 14,
+                'autoScriptToLang' => true,
+                'autoLangToFont' => true,
                 'fontDir' => array_merge($defaultConfig['fontDir'], [storage_path('fonts')]),
                 'fontdata' => $fontData + [
                     'roboto' => [

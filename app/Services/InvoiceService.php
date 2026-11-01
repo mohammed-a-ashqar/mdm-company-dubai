@@ -159,6 +159,7 @@ public function store($request)
         return [
             'invoiceName' => $invoice,
             'products' => $products,
+            'doc' => \App\Support\InvoiceDocument::make($invoice, $products),
             'subTotalPrice' => $subTotalPrice,
             'subTotalVat' => $subTotalVat,
             'subTotalDiscounted' => $subTotalDiscounted,
