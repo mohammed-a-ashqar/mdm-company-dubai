@@ -91,7 +91,7 @@
                                                     {{ (int) $item->quantity }}@if (($item->free_items ?? 0) > 0)
                                                         / {{ (int) $item->free_items }} f @endif
                                                 </td>
-                                                <td class="text-end">{{ number_format((float) $item->unit_price, 2) }}</td>
+                                                <td class="text-end">{{ number_format($item->displayUnitPrice(), 2) }}</td>
                                                 <td class="text-end">-{{ number_format($item->priceAfterDiscount(), 2) }}</td>
                                                 <td class="text-end">-{{ number_format($item->vatAmount(), 2) }}</td>
                                                 <td class="text-end">-{{ number_format($item->lineTotal(), 2) }}</td>

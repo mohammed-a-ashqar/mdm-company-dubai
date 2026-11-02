@@ -15,8 +15,8 @@
         .cn-classic .form-control:focus { border-color: #000; box-shadow: 0 0 0 1px #000; }
         .cn-classic .cn-preview-scope > .mb-2 { padding: 8px 10px; border: 1px solid #000; }
         .cn-classic .table td.text-end .text-muted { color: #111 !important; }
-        .cn-classic .table input[type="number"] { width: 5rem; text-align: center; }
-        .cn-classic .table input[type="text"] { min-width: 8rem; }
+        .cn-classic .table input[type="number"] { width: 4rem; text-align: center; }
+        .cn-classic .table input[type="text"] { min-width: 6rem; }
         .cn-classic .table .badge { border-radius: 0; background: #000 !important; font-weight: 600; box-shadow: none; }
         .cn-classic .table tfoot .cn-foot-tot { background: #000; color: #fff; }
     </style>
@@ -101,6 +101,12 @@
                                 </div>
                             </div>
 
+                            <div class="form-check mb-3">
+                                <input type="checkbox" class="form-check-input" id="average_free_price" name="average_free_price" value="1" {{ old('average_free_price') ? 'checked' : '' }}>
+                                <label class="form-check-label" for="average_free_price">Average price over paid + free units</label>
+                                <div class="text-muted small">Spreads each line's paid value over all its units, so returned free units are priced too. Example: 5 paid + 1 free at 190.00 becomes 6 units at 158.33.</div>
+                            </div>
+
                             <div id="preview-wrap" class="mb-3"></div>
 
                             <button type="submit" class="btn btn-primary waves-effect waves-light">Save credit note</button>
@@ -118,6 +124,7 @@
             const wrap = document.getElementById('preview-wrap');
             const previewUrl = @json(url('/credit-note/preview'));
             const oldLineItems = @json(old('line_items', []));
+            const averageToggle = document.getElementById('average_free_price');
 
             function fmt(n) {
                 const x = Number(n);
@@ -143,8 +150,16 @@
                 let sumGross = 0, sumPad = 0, sumVat = 0, sumTot = 0;
                 tableRoot.querySelectorAll('tr.cn-line').forEach(function (tr) {
                     const qtyInp = tr.querySelector('.cn-qty-paid');
-                    const q = qtyInp && !qtyInp.disabled ? qtyInp.value : 0;
-                    const unit = Number(tr.getAttribute('data-unit-price'));
+                    const freeInp = tr.querySelector('.cn-qty-free');
+                    const paidUnits = Math.max(0, Number(qtyInp && !qtyInp.disabled ? qtyInp.value : 0) || 0);
+                    const freeUnits = Math.max(0, Number(freeInp ? freeInp.value : 0) || 0);
+                    const origPaid = Number(tr.getAttribute('data-orig-paid'));
+                    const origFree = Number(tr.getAttribute('data-orig-free'));
+                    const averaged = averageToggle.checked && origFree > 0;
+                    const q = averaged ? paidUnits + freeUnits : paidUnits;
+                    const unit = Number(tr.getAttribute('data-unit-price')) * (averaged ? origPaid / (origPaid + origFree) : 1);
+                    const cUnit = tr.querySelector('.cn-cell-unit');
+                    if (cUnit) cUnit.textContent = unit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                     const vatp = Number(tr.getAttribute('data-vat-percent'));
                     const lineDisc = Number(tr.getAttribute('data-discount-percent') || 0);
                     const am = lineAmounts(q, unit, vatp, lineDisc);
@@ -250,7 +265,7 @@
                         : '<input type="text" class="form-control form-control-sm cn-line-note" name="line_items[' + idx + '][line_note]" maxlength="500" placeholder="Optional">';
 
                     rows +=
-                        '<tr class="cn-line' + roClass + '" data-unit-price="' + escapeHtml(String(line.unit_price)) + '" data-vat-percent="' + escapeHtml(String(line.vat_percent)) + '" data-discount-percent="' + escapeHtml(String(lineDisc)) + '">' +
+                        '<tr class="cn-line' + roClass + '" data-unit-price="' + escapeHtml(String(line.unit_price)) + '" data-vat-percent="' + escapeHtml(String(line.vat_percent)) + '" data-discount-percent="' + escapeHtml(String(lineDisc)) + '" data-orig-paid="' + Number(line.original_quantity) + '" data-orig-free="' + Number(line.original_free_items) + '">' +
                         '<td style="min-width:14rem">' +
                             '<input type="hidden" name="line_items[' + idx + '][product_id]" value="' + line.product_id + '">' +
                             '<div class="fw-semibold">' + escapeHtml(line.item_name) + (full ? ' <span class="badge bg-secondary">Fully returned</span>' : '') + '</div>' +
@@ -261,7 +276,7 @@
                         '<td class="small">' + escapeHtml(availText) + '</td>' +
                         '<td style="width:1%">' + paidInput + '</td>' +
                         '<td style="width:1%">' + freeCell + '</td>' +
-                        '<td class="text-end">' + unitCell + '</td>' +
+                        '<td class="text-end cn-cell-unit">' + unitCell + '</td>' +
                         '<td class="text-end cn-cell-pad"></td>' +
                         '<td class="text-end cn-cell-vat"></td>' +
                         '<td class="text-end cn-cell-tot"></td>' +
@@ -297,6 +312,11 @@
                 });
                 applyOldValues(tbl);
             }
+
+            averageToggle.addEventListener('change', function () {
+                const tbl = wrap.querySelector('.cn-preview-table');
+                if (tbl) recalc(tbl);
+            });
 
             select.addEventListener('change', function () {
                 const id = this.value;

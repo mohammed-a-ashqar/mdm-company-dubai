@@ -32,6 +32,7 @@ class CreditNoteRequest extends FormRequest
 
         if ($this->route()->named('credit-note.store')) {
             $rules['invoice_id'] = ['required', 'exists:invoices,id'];
+            $rules['average_free_price'] = ['nullable', 'boolean'];
             $rules['line_items'] = ['required', 'array', 'min:1'];
             $rules['line_items.*.product_id'] = ['required', 'integer', 'exists:products,id'];
             $rules['line_items.*.quantity'] = ['required', 'integer', 'min:0'];

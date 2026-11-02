@@ -208,7 +208,11 @@ class CreditNoteService
                     $lineNote = null;
                 }
 
-                $item = CreditNoteItem::create([
+                $averaged = $request->boolean('average_free_price') && $origFree > 0
+                    ? ['averaged_unit_price' => $productModel->price * $origPaid / ($origPaid + $origFree)]
+                    : [];
+
+                $item = CreditNoteItem::create($averaged + [
                     'credit_note_id' => $creditNote->id,
                     'product_id' => $productModel->id,
                     'item_name' => $productModel->name,

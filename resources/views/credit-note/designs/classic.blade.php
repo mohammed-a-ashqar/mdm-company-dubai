@@ -18,8 +18,10 @@
     $neg = fn ($v) => '-'.number_format((float) $v, 2);
     $pct = fn ($v) => rtrim(rtrim(number_format((float) $v, 2, '.', ''), '0'), '.').'%';
 
-    $grossOf = fn ($i) => (float) $i->unit_price * (int) $i->quantity;
+    $grossOf = fn ($i) => $i->grossAmount();
     $items = $creditNote->items;
+    $hasAveraged = $items->contains(fn ($i) => $i->isAveraged());
+    $focUnits = $items->sum(fn ($i) => $i->isAveraged() ? 0 : (int) ($i->free_items ?? 0));
 
     $totalGross = $items->sum($grossOf);
     $totalTaxable = $items->sum(fn ($i) => $i->priceAfterDiscount());
@@ -117,7 +119,7 @@
             @forelse ($items->values() as $i => $item)
                 @php
                     $edge = $i === $lastLine ? ' last' : '';
-                    $free = (int) ($item->free_items ?? 0);
+                    $free = $item->isAveraged() ? 0 : (int) ($item->free_items ?? 0);
                 @endphp
                 <tr>
                     <td class="c{{ $edge }}">{{ $i + 1 }}</td>
@@ -126,8 +128,8 @@
                         @if ($free)<br><span style="font-size:7.4pt; color:#444">Free of charge: {{ $free }} unit(s)</span>@endif
                         @if ($item->line_note)<br><span style="font-size:7.4pt; color:#444">Note: {{ $item->line_note }}</span>@endif
                     </td>
-                    <td class="c{{ $edge }}">{{ (int) $item->quantity }}@if ($free) + {{ $free }}@endif</td>
-                    <td class="{{ $edge }}">{{ $m($item->unit_price) }}</td>
+                    <td class="c{{ $edge }}">{{ $item->pricedUnits() }}@if ($free) + {{ $free }}@endif</td>
+                    <td class="{{ $edge }}">{{ $m($item->displayUnitPrice()) }}</td>
                     <td class="{{ $edge }}">{{ $neg($grossOf($item)) }}</td>
                     @if ($hasDisc)
                         <td class="c{{ $edge }}">{{ $pct($item->company_discount_percent) }}</td>
@@ -147,8 +149,9 @@
     <table>
         <tr>
             <td style="width:52%" class="counts">
-                Total Quantity : {{ $items->sum(fn ($i) => (int) $i->quantity) }}@if ($items->sum(fn ($i) => (int) ($i->free_items ?? 0))) + {{ $items->sum(fn ($i) => (int) ($i->free_items ?? 0)) }} FOC @endif<br>
+                Total Quantity : {{ $items->sum(fn ($i) => $i->pricedUnits()) }}@if ($focUnits) + {{ $focUnits }} FOC @endif<br>
                 No. of Items : {{ $items->count() }}
+                @if ($hasAveraged)<br>Unit rate averaged over paid and free units.@endif
             </td>
             <td style="width:48%">
                 <table class="tot">
