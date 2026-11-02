@@ -2,6 +2,24 @@
 @section('title')
 @endsection
 @section('css')
+    <style>
+        /* Classic look: same black rules and grey header as the printed credit note */
+        .cn-classic .table-bordered > :not(caption) > * > * { border-color: #000; }
+        .cn-classic .table thead th { background: #f0f0f0 !important; color: #000; font-size: 12px; font-weight: 700; text-align: center !important; vertical-align: middle; }
+        .cn-classic .table tbody td { vertical-align: middle; color: #111; }
+        .cn-classic .table tfoot td { color: #111; }
+        .cn-classic .table-bordered { border-bottom: 1px solid #000; }
+        .cn-classic .header-title { margin: 0 0 12px; padding: 8px 0; border-top: 2.5px solid #000; border-bottom: 1px solid #000; font-size: 20px; font-weight: 700; letter-spacing: 1px; text-align: center; text-transform: uppercase; color: #000; }
+        .cn-classic label.form-label { font-weight: 700; color: #000; }
+        .cn-classic .form-control { border-color: #000; border-radius: 0; color: #111; }
+        .cn-classic .form-control:focus { border-color: #000; box-shadow: 0 0 0 1px #000; }
+        .cn-classic .cn-preview-scope > .mb-2 { padding: 8px 10px; border: 1px solid #000; }
+        .cn-classic .table td.text-end .text-muted { color: #111 !important; }
+        .cn-classic .table input[type="number"] { width: 5rem; text-align: center; }
+        .cn-classic .table input[type="text"] { min-width: 8rem; }
+        .cn-classic .table .badge { border-radius: 0; background: #000 !important; font-weight: 600; box-shadow: none; }
+        .cn-classic .table tfoot .cn-foot-tot { background: #000; color: #fff; }
+    </style>
 @endsection
 @section('title_page')
     الرئيسية
@@ -9,7 +27,7 @@
 @section('title_page2')
 @endsection
 @section('content')
-    <div class="container-fluid">
+    <div class="container-fluid cn-classic">
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box">

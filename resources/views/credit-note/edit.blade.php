@@ -2,6 +2,14 @@
 @section('title')
 @endsection
 @section('css')
+    <style>
+        /* Classic look: same black rules and grey header as the printed credit note */
+        .cn-classic .table-bordered > :not(caption) > * > * { border-color: #000; }
+        .cn-classic .table thead th { background: #f0f0f0 !important; color: #000; font-size: 12px; font-weight: 700; text-align: center !important; vertical-align: middle; }
+        .cn-classic .table tbody td { vertical-align: middle; color: #111; }
+        .cn-classic .table tfoot td { color: #111; }
+        .cn-classic .table-bordered { border-bottom: 1px solid #000; }
+    </style>
 @endsection
 @section('title_page')
     الرئيسية
@@ -9,7 +17,7 @@
 @section('title_page2')
 @endsection
 @section('content')
-    <div class="container-fluid">
+    <div class="container-fluid cn-classic">
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box">
