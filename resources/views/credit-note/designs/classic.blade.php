@@ -69,7 +69,6 @@
             <td class="col">
                 <b style="font-size:9pt; text-decoration:underline">CREDIT TO:</b><br>
                 @if ($company)
-                    Customer Code: CUST-{{ str_pad((string) $company->id, 4, '0', STR_PAD_LEFT) }}<br>
                     <b>{{ $company->name }}</b><br>
                     @if ($company->address){{ $company->address }}<br>@endif
                     @if ($company->phone)Tel: {{ $company->phone }}<br>@endif
