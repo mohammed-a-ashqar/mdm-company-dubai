@@ -85,6 +85,22 @@ document.querySelector('.sidebar-toggle').addEventListener('click', function() {
             });
         }
 
+        function JSconfirmQuotation(event, id) {
+            event.preventDefault();
+
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this quotation!",
+                icon: "warning",
+                buttons: ["Cancel", "Yes, delete it!"],
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    document.getElementById('deletequotation' + id).submit();
+                }
+            });
+        }
+
         function JSconfirmCreditNote(event, id) {
             event.preventDefault();
 

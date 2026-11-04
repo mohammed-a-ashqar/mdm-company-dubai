@@ -134,6 +134,24 @@
                     </div>
                 </li>
 
+                <li>
+                    <a href="#sidebarQuotations" data-bs-toggle="collapse">
+                        <i class="mdi mdi-file-table-outline"></i>
+                        <span> Quotations </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="sidebarQuotations">
+                        <ul class="nav-second-level">
+                            <li>
+                                <a href="{{ route('quotation.create') }}">Add Quotation</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('quotation.index') }}">Quotations List</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
 
 
             </ul>

@@ -7,6 +7,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\CreditNoteController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QuotationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,6 +65,17 @@ Route::prefix('company/')->name('company.')->middleware('auth')->group(function(
         Route::get('/edit/{id}', [CreditNoteController::class, 'edit'])->name('edit');
         Route::post('/update/{id}', [CreditNoteController::class, 'update'])->name('update');
         Route::post('/delete/{id}', [CreditNoteController::class, 'destroy'])->name('delete');
+    });
+    Route::prefix('quotation/')->name('quotation.')->middleware('auth')->group(function () {
+        Route::get('/', [QuotationController::class, 'index'])->name('index');
+        Route::get('/create', [QuotationController::class, 'create'])->name('create');
+        Route::post('/store', [QuotationController::class, 'store'])->name('store');
+        Route::get('/show/{id}', [QuotationController::class, 'show'])->name('show');
+        Route::get('/edit/{id}', [QuotationController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [QuotationController::class, 'update'])->name('update');
+        Route::post('/delete/{id}', [QuotationController::class, 'destroy'])->name('delete');
+        Route::get('/pdf/{id}', [QuotationController::class, 'pdf'])->name('pdf');
+        Route::get('/download/{id}', [QuotationController::class, 'download'])->name('download');
     });
     Route::post('/invoice/download/{id}', [InvoiceController::class, 'downloadInvoice'])->middleware('auth')->name('download');
     Route::post('/credit-note/download/{id}', [CreditNoteController::class, 'downloadCreditNote'])->middleware('auth')->name('credit-note.download');
