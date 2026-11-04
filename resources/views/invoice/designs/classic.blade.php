@@ -43,7 +43,6 @@
         <tr>
             <td class="col">
                 <b style="font-size:9pt; text-decoration:underline">BILL TO:</b><br>
-                Customer Code: {{ $c['code'] }}<br>
                 <b>{{ $c['name'] }}</b><br>
                 @if ($c['address']){{ $c['address'] }}<br>@endif
                 @if ($c['phone'])Tel: {{ $c['phone'] }}<br>@endif
@@ -63,7 +62,6 @@
                     <tr><td class="k">Supply Period</td><td>: {{ $doc['period_from']?->format('d/m/Y') }}@if ($doc['period_from'] && $doc['period_to'] && ! $doc['period_to']->isSameDay($doc['period_from'])) – {{ $doc['period_to']->format('d/m/Y') }}@endif</td></tr>
                     <tr><td class="k">Currency</td><td>: {{ $cur }}</td></tr>
                     @if ($hasDisc)<tr><td class="k">Customer Discount</td><td>: {{ $pct($c['discount']) }}</td></tr>@endif
-                    <tr><td class="k">Payment Status</td><td>: {{ ucfirst($doc['status']) }}</td></tr>
                 </table>
             </td>
         </tr>
