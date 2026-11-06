@@ -17,6 +17,19 @@ return [
 
     'currency' => env('INVOICE_CURRENCY', 'AED'),
 
+    /*
+    | Footer of the statement of accounts: legal entity and bank details.
+    */
+    'statement' => [
+        'legal_name' => env('STATEMENT_LEGAL_NAME', 'M D M PARA PHARMACEUTICAL PRODUCTS TRADING L L C'),
+        'address' => env('STATEMENT_ADDRESS', 'Office 153-101 King Mohammed Abdulaziz Mohammed bin Faris - Deira - Al Murar'),
+        'trn' => env('STATEMENT_TRN', '104718581200003'),
+        'account_no' => env('STATEMENT_ACCOUNT_NO', '097524142748501'),
+        'iban' => env('STATEMENT_IBAN', 'AE52 0240 0975 2414 2748 501'),
+        'account_name' => env('STATEMENT_ACCOUNT_NAME', 'M D M PARA PHARMACEUTICAL PRODUCTS TRADING L L C'),
+        'bank' => env('STATEMENT_BANK', 'Dubai Islamic Bank'),
+    ],
+
     'terms' => [
         'Goods remain the property of the seller until full payment is received.',
         'Customer must sign and stamp the invoice copies to acknowledge receipt of the goods in good condition and in full.',

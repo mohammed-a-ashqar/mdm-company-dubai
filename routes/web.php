@@ -8,6 +8,7 @@ use App\Http\Controllers\CreditNoteController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuotationController;
+use App\Http\Controllers\StatementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,6 +77,12 @@ Route::prefix('company/')->name('company.')->middleware('auth')->group(function(
         Route::post('/delete/{id}', [QuotationController::class, 'destroy'])->name('delete');
         Route::get('/pdf/{id}', [QuotationController::class, 'pdf'])->name('pdf');
         Route::get('/download/{id}', [QuotationController::class, 'download'])->name('download');
+    });
+    Route::prefix('statement/')->name('statement.')->middleware('auth')->group(function () {
+        Route::get('/', [StatementController::class, 'index'])->name('index');
+        Route::get('/show/{company}', [StatementController::class, 'show'])->name('show');
+        Route::get('/pdf/{company}', [StatementController::class, 'pdf'])->name('pdf');
+        Route::get('/download/{company}', [StatementController::class, 'download'])->name('download');
     });
     Route::post('/invoice/download/{id}', [InvoiceController::class, 'downloadInvoice'])->middleware('auth')->name('download');
     Route::post('/credit-note/download/{id}', [CreditNoteController::class, 'downloadCreditNote'])->middleware('auth')->name('credit-note.download');

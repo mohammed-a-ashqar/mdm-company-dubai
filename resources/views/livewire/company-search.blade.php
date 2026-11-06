@@ -25,6 +25,10 @@
                                         <span>edit</span>
                                     </div>                                </a>
 
+                                <a href="{{ route('statement.show', $company->id) }}" title="Statement of Accounts" class="btn btn-success waves-effect waves-light">
+                                    <span>statement</span>
+                                </a>
+
                                 <form action="{{ route('company.delete', $company->id) }}" method="POST" id="deleteform{{ $company->id }}">
                                     @csrf
                                     <button type="button" onclick="JSconfirm(event, {{ $company->id }})" class="btn btn-danger waves-effect waves-light">

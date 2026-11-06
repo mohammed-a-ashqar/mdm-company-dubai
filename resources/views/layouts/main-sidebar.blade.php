@@ -135,6 +135,13 @@
                 </li>
 
                 <li>
+                    <a href="{{ route('statement.index') }}">
+                        <i class="mdi mdi-file-document-outline"></i>
+                        <span> Statement of Accounts </span>
+                    </a>
+                </li>
+
+                <li>
                     <a href="#sidebarQuotations" data-bs-toggle="collapse">
                         <i class="mdi mdi-file-table-outline"></i>
                         <span> Quotations </span>
