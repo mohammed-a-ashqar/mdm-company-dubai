@@ -6,7 +6,6 @@ use App\Models\Company;
 use App\Models\CreditNote;
 use App\Models\Invoice;
 use App\Models\Product;
-use App\Models\Quotation;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
@@ -18,76 +17,89 @@ use Illuminate\Support\Collection;
  */
 class DashboardData
 {
-    public static function make(): array
+    public static function make(?int $year = null): array
     {
         $now = now();
         $invoices = self::invoiceTotals();
         $credits = self::creditNoteTotals();
 
-        $inMonth = fn (Collection $c, Carbon $m) => $c->filter(fn ($r) => $r['date']->isSameMonth($m));
+        $years = $invoices->map(fn ($r) => $r['date']->year)->push($now->year)->unique()->sortDesc()->values();
+        $year = $year && $years->contains($year) ? $year : $now->year;
+        $isCurrent = $year === $now->year;
+
         $inYear = fn (Collection $c, int $y) => $c->filter(fn ($r) => $r['date']->year === $y);
+        $inMonth = fn (Collection $c, Carbon $m) => $c->filter(fn ($r) => $r['date']->isSameMonth($m));
 
-        $thisMonth = $inMonth($invoices, $now);
-        $lastMonth = $inMonth($invoices, $now->copy()->subMonthNoOverflow());
-        $thisYear = $inYear($invoices, $now->year);
-        $creditsYear = $inYear($credits, $now->year);
-        // Same stretch of last year (1 Jan → same day), for a fair year-to-date comparison.
-        $lastYtdEnd = $now->copy()->subYearNoOverflow()->endOfDay();
-        $lastYtd = $inYear($invoices, $now->year - 1)->filter(fn ($r) => $r['date']->lte($lastYtdEnd));
+        $yearInv = $inYear($invoices, $year);
+        $yearCred = $inYear($credits, $year);
 
-        $months = collect(range(11, 0))->map(function ($back) use ($now, $invoices, $credits, $inMonth) {
-            $m = $now->copy()->startOfMonth()->subMonthsNoOverflow($back);
-            $inv = $inMonth($invoices, $m);
+        // Previous year over the same stretch (1 Jan → same day) while the year is still running.
+        $prevEnd = $isCurrent ? $now->copy()->subYearNoOverflow()->endOfDay() : Carbon::create($year - 1, 12, 31)->endOfDay();
+        $prevInv = $inYear($invoices, $year - 1)->filter(fn ($r) => $r['date']->lte($prevEnd));
+
+        $months = collect(range(1, 12))->map(function ($n) use ($year, $yearInv, $yearCred, $inMonth, $now, $isCurrent) {
+            $m = Carbon::create($year, $n, 1);
+            $inv = $inMonth($yearInv, $m);
+            $cred = $inMonth($yearCred, $m)->sum('total');
+            $total = $inv->sum('total');
 
             return [
-                'label' => $m->format('M Y'),
+                'n' => $n,
+                'label' => $m->format('M'),
+                'name' => $m->format('F'),
+                'count' => $inv->count(),
                 'net' => round($inv->sum('net'), 2),
                 'vat' => round($inv->sum('vat'), 2),
-                'total' => round($inv->sum('total'), 2),
-                'credits' => round($inMonth($credits, $m)->sum('total'), 2),
-                'count' => $inv->count(),
+                'total' => round($total, 2),
+                'credits' => round($cred, 2),
+                'after' => round($total - $cred, 2),
+                'future' => $isCurrent && $n > $now->month,
+                'current' => $isCurrent && $n === $now->month,
             ];
-        })->values();
+        });
 
-        $byCompany = $thisYear->groupBy('company')
-            ->map(fn ($rows, $name) => ['name' => $name, 'total' => $rows->sum('total'), 'count' => $rows->count()])
+        $yearTotal = $yearInv->sum('total');
+        $prevTotal = $prevInv->sum('total');
+
+        $companies = $yearInv->groupBy('company')
+            ->map(fn ($rows, $name) => ['name' => $name, 'total' => $rows->sum('total'), 'count' => $rows->count(), 'last' => $rows->max('date')])
             ->sortByDesc('total')->values();
-        $topCompanies = $byCompany->take(6)->values();
-        $othersTotal = $byCompany->slice(6)->sum('total');
-        $yearTotal = $thisYear->sum('total');
-        $lastYtdTotal = $lastYtd->sum('total');
 
-        $monthTotal = $thisMonth->sum('total');
-        $lastTotal = $lastMonth->sum('total');
+        $thisMonth = $inMonth($invoices, $now);
+        $lastMonth = $inMonth($invoices, $now->copy()->startOfMonth()->subMonthNoOverflow());
 
         return [
             'currency' => config('invoice.currency', 'AED'),
             'now' => $now,
-            'month' => [
-                'total' => $monthTotal,
-                'count' => $thisMonth->count(),
-                'change' => $lastTotal > 0 ? ($monthTotal - $lastTotal) / $lastTotal * 100 : null,
-                'last_total' => $lastTotal,
-            ],
-            'year' => [
+            'year' => $year,
+            'years' => $years,
+            'is_current' => $isCurrent,
+            'prev_label' => $isCurrent ? 'same period '.($year - 1) : (string) ($year - 1),
+            'totals' => [
                 'total' => $yearTotal,
-                'last_ytd' => $lastYtdTotal,
-                'change' => $lastYtdTotal > 0 ? ($yearTotal - $lastYtdTotal) / $lastYtdTotal * 100 : null,
-                'average' => $thisYear->count() ? $yearTotal / $thisYear->count() : 0,
-                'net' => $thisYear->sum('net'),
-                'vat' => $thisYear->sum('vat'),
-                'count' => $thisYear->count(),
-                'credits' => $creditsYear->sum('total'),
-                'credits_count' => $creditsYear->count(),
-                'after_credits' => $thisYear->sum('total') - $creditsYear->sum('total'),
-                'quotations' => Quotation::whereYear('quotation_date', $now->year)->count(),
+                'net' => $yearInv->sum('net'),
+                'vat' => $yearInv->sum('vat'),
+                'count' => $yearInv->count(),
+                'credits' => $yearCred->sum('total'),
+                'credits_count' => $yearCred->count(),
+                'after' => $yearTotal - $yearCred->sum('total'),
+                'average' => $yearInv->count() ? $yearTotal / $yearInv->count() : 0,
+                'prev' => $prevTotal,
+                'change' => $prevTotal > 0 ? ($yearTotal - $prevTotal) / $prevTotal * 100 : null,
             ],
-            'companies' => Company::count(),
-            'active_companies' => $thisYear->pluck('company')->unique()->count(),
+            'month' => [
+                'name' => $now->format('F Y'),
+                'total' => $thisMonth->sum('total'),
+                'count' => $thisMonth->count(),
+                'last' => $lastMonth->sum('total'),
+                'last_name' => $now->copy()->startOfMonth()->subMonthNoOverflow()->format('F'),
+                'companies' => $thisMonth->pluck('company')->unique()->count(),
+            ],
             'months' => $months,
-            'top_companies' => $topCompanies,
-            'others_total' => $othersTotal,
-            'latest' => $invoices->sortByDesc(fn ($r) => $r['date']->timestamp * 100000 + $r['id'])->take(8)->values(),
+            'companies' => $companies->take(8)->values(),
+            'companies_active' => $companies->count(),
+            'companies_all' => Company::count(),
+            'latest' => $invoices->sortByDesc(fn ($r) => $r['date']->timestamp * 100000 + $r['id'])->take(10)->values(),
         ];
     }
 

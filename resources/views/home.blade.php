@@ -4,139 +4,85 @@
 @endsection
 @section('css')
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        .dash {
-            --d-ink: #0f172a;
-            --d-muted: #64748b;
-            --d-faint: #94a3b8;
-            --d-line: #e8edf5;
-            --d-card: #ffffff;
-            --d-blue: #1f5bd6;
-            --d-blue-soft: #e8efff;
-            --d-teal: #0ea5a4;
-            --d-teal-soft: #e0f7f6;
-            --d-amber: #f59e0b;
-            --d-amber-soft: #fef3e2;
-            --d-rose: #e11d48;
-            --d-rose-soft: #ffe8ee;
-            --d-up: #059669;
-            --d-up-soft: #e3f7ef;
-            --d-down: #dc2626;
-            --d-down-soft: #fdecec;
-            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-            color: var(--d-ink);
-            padding-top: 18px;
-            padding-bottom: 24px;
+        .ov {
+            --ink: #16191d;
+            --ink-2: #3d434b;
+            --mute: #6b7280;
+            --line: #e2e5e9;
+            --line-2: #eef0f2;
+            --panel: #fff;
+            --accent: #1c4fa1;
+            --accent-2: #9db6dd;
+            --pos: #13795b;
+            --neg: #b42318;
+            font-family: "IBM Plex Sans", "Segoe UI", Roboto, Arial, sans-serif;
+            color: var(--ink);
+            font-size: 14px;
+            padding: 22px 0 28px;
         }
-        .dash .num { font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+        .ov .fig { font-variant-numeric: tabular-nums; }
+        .ov a { color: var(--accent); }
 
-        /* Hero */
-        .dash-hero {
-            position: relative;
-            overflow: hidden;
-            border-radius: 20px;
-            padding: 28px 30px;
-            color: #fff;
-            background: linear-gradient(120deg, #0b1f4d 0%, #163a8a 52%, #1f5bd6 100%);
-            box-shadow: 0 18px 40px -22px rgba(22, 58, 138, .75);
-            margin-bottom: 22px;
-        }
-        .dash-hero::before, .dash-hero::after {
-            content: ""; position: absolute; border-radius: 50%; pointer-events: none;
-            background: radial-gradient(circle, rgba(255, 255, 255, .16) 0%, rgba(255, 255, 255, 0) 70%);
-        }
-        .dash-hero::before { width: 420px; height: 420px; right: -120px; top: -200px; }
-        .dash-hero::after { width: 300px; height: 300px; right: 260px; bottom: -220px; }
-        .dash-hero > * { position: relative; z-index: 1; }
-        .dash-eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: rgba(255, 255, 255, .7); }
-        .dash-hero h1 { color: #fff; font-size: 26px; font-weight: 700; margin: 6px 0 4px; letter-spacing: -.02em; }
-        .dash-hero .sub { color: rgba(255, 255, 255, .75); font-size: 14px; }
-        .dash-hero-stats { display: flex; gap: 14px; flex-wrap: wrap; justify-content: flex-end; }
-        .dash-hero-stat {
-            min-width: 170px; padding: 14px 18px; border-radius: 14px;
-            background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .16);
-            backdrop-filter: blur(6px);
-        }
-        .dash-hero-stat .k { font-size: 12px; color: rgba(255, 255, 255, .72); font-weight: 500; }
-        .dash-hero-stat .v { font-size: 22px; font-weight: 700; margin-top: 2px; white-space: nowrap; }
-        .dash-hero-stat .v small { font-size: 12px; font-weight: 600; opacity: .75; margin-right: 3px; }
-        .dash-hero .chip { background: rgba(255, 255, 255, .16); color: #fff; }
+        .ov-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+        .ov-head h1 { font-size: 21px; font-weight: 600; margin: 0; color: var(--ink); }
+        .ov-head p { margin: 4px 0 0; color: var(--mute); }
+        .ov-tools { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .ov-years { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--panel); }
+        .ov-years a { padding: 6px 14px; color: var(--ink-2); text-decoration: none; border-left: 1px solid var(--line); font-weight: 500; }
+        .ov-years a:first-child { border-left: 0; }
+        .ov-years a.on { background: var(--ink); color: #fff; }
+        .ov-link { padding: 6px 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--ink-2) !important; text-decoration: none; font-weight: 500; }
+        .ov-link:hover { border-color: #c9ced4; }
 
-        /* Cards */
-        .d-card {
-            background: var(--d-card); border: 1px solid var(--d-line); border-radius: 16px;
-            box-shadow: 0 1px 2px rgba(15, 23, 42, .04), 0 8px 24px -18px rgba(15, 23, 42, .25);
-            height: calc(100% - 22px); margin-bottom: 22px;
-        }
-        .d-card-body { padding: 20px 22px; }
-        .d-card-title { font-size: 15px; font-weight: 700; margin: 0; color: var(--d-ink); }
-        .d-card-sub { font-size: 12.5px; color: var(--d-muted); margin-top: 2px; }
+        .ov-panel { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; margin-bottom: 20px; }
+        .ov-panel-h { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--line-2); }
+        .ov-panel-h h2 { font-size: 14.5px; font-weight: 600; margin: 0; color: var(--ink); }
+        .ov-panel-h span { color: var(--mute); font-size: 13px; }
+        .ov-panel-b { padding: 16px 18px; }
+        .ov-row { display: flex; flex-wrap: wrap; margin: 0 -10px; }
+        .ov-row > div { padding: 0 10px; }
+        .ov-row > div > .ov-panel { height: calc(100% - 20px); }
 
-        .kpi { position: relative; padding: 18px 20px 6px; overflow: hidden; }
-        .kpi-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-        .kpi-icon { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; font-size: 19px; flex-shrink: 0; }
-        .kpi-label { font-size: 13px; color: var(--d-muted); font-weight: 500; margin-top: 14px; }
-        .kpi-value { font-size: 24px; font-weight: 800; margin-top: 2px; white-space: nowrap; }
-        .kpi-value small { font-size: 13px; color: var(--d-faint); font-weight: 600; margin-right: 4px; }
-        .kpi-foot { font-size: 12.5px; color: var(--d-muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .kpi-spark { margin: 4px -20px 0; height: 56px; }
-        .t-blue { background: var(--d-blue-soft); color: var(--d-blue); }
-        .t-teal { background: var(--d-teal-soft); color: var(--d-teal); }
-        .t-amber { background: var(--d-amber-soft); color: var(--d-amber); }
-        .t-rose { background: var(--d-rose-soft); color: var(--d-rose); }
+        .ov-sum { display: grid; grid-template-columns: 1.35fr repeat(4, 1fr); }
+        .ov-sum > div { padding: 16px 18px; border-left: 1px solid var(--line-2); }
+        .ov-sum > div:first-child { border-left: 0; }
+        .ov-sum .k { color: var(--mute); font-size: 13px; }
+        .ov-sum .v { font-size: 22px; font-weight: 600; margin-top: 4px; white-space: nowrap; letter-spacing: -.01em; }
+        .ov-sum > div:first-child .v { font-size: 28px; }
+        .ov-sum .v .c { font-size: 13px; color: var(--mute); font-weight: 500; margin-left: 4px; letter-spacing: 0; }
+        .ov-sum .n { font-size: 12.5px; color: var(--mute); margin-top: 4px; }
+        .pos { color: var(--pos); }
+        .neg { color: var(--neg); }
 
-        .chip { display: inline-flex; align-items: center; gap: 3px; font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
-        .chip-up { background: var(--d-up-soft); color: var(--d-up); }
-        .chip-down { background: var(--d-down-soft); color: var(--d-down); }
-        .chip-flat { background: #f1f5f9; color: var(--d-muted); }
+        .ov-dl { margin: 0; }
+        .ov-dl > div { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid var(--line-2); }
+        .ov-dl > div:first-child { border-top: 0; }
+        .ov-dl dt { font-weight: 400; color: var(--mute); }
+        .ov-dl dd { margin: 0; font-weight: 600; text-align: right; }
+        .ov-big { font-size: 30px; font-weight: 600; letter-spacing: -.01em; line-height: 1.1; }
+        .ov-sub { color: var(--mute); margin-top: 4px; }
+        .ov-sep { border: 0; border-top: 1px solid var(--line); margin: 14px 0 6px; }
+        .ov-cap { font-size: 12px; color: var(--mute); font-weight: 600; margin-top: 4px; }
 
-        .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12.5px; color: var(--d-muted); }
-        .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+        .ov-t { width: 100%; border-collapse: collapse; }
+        .ov-t th { font-weight: 500; color: var(--mute); font-size: 12.5px; text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; background: #fafbfc; }
+        .ov-t td { padding: 9px 12px; border-bottom: 1px solid var(--line-2); white-space: nowrap; }
+        .ov-t tbody tr:hover td { background: #f8f9fb; }
+        .ov-t .r { text-align: right; }
+        .ov-t tfoot td { font-weight: 600; border-top: 1px solid var(--line); border-bottom: 0; background: #fafbfc; }
+        .ov-t tr.dim td { color: #b3b8bf; }
+        .ov-t tr.now td:first-child { box-shadow: inset 3px 0 0 var(--accent); font-weight: 600; }
+        .ov-t .co { max-width: 210px; overflow: hidden; text-overflow: ellipsis; }
+        .ov-share { display: inline-block; width: 36px; height: 4px; background: var(--line-2); vertical-align: middle; margin-left: 8px; }
+        .ov-share i { display: block; height: 100%; background: var(--accent); }
+        .ov-empty { color: var(--mute); text-align: center; padding: 22px 0; }
 
-        .mini-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0 4px; }
-        .mini-stat { background: #f8fafc; border: 1px solid var(--d-line); border-radius: 12px; padding: 10px 14px; }
-        .mini-stat .k { font-size: 12px; color: var(--d-muted); }
-        .mini-stat .v { font-size: 17px; font-weight: 700; margin-top: 2px; white-space: nowrap; }
-
-        /* Share list */
-        .share-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; font-size: 13px; }
-        .share-row .dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
-        .share-row .name { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #334155; }
-        .share-row .pct { font-weight: 700; color: var(--d-ink); }
-
-        /* Avatars */
-        .avatar { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
-
-        /* Ranking */
-        .rank-row { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px dashed var(--d-line); }
-        .rank-row:last-child { border-bottom: 0; }
-        .rank-row .info { flex: 1; min-width: 0; }
-        .rank-row .name { font-size: 13.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .rank-row .meta { font-size: 12px; color: var(--d-muted); }
-        .rank-row .amt { font-size: 13.5px; font-weight: 700; white-space: nowrap; text-align: right; }
-        .bar { height: 5px; border-radius: 99px; background: #eef2f7; margin-top: 6px; overflow: hidden; }
-        .bar > span { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, #1f5bd6, #5b8cff); }
-
-        /* Table */
-        .d-table { width: 100%; border-collapse: separate; border-spacing: 0; }
-        .d-table th { font-size: 11.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--d-faint); font-weight: 600; padding: 0 10px 10px; border-bottom: 1px solid var(--d-line); white-space: nowrap; }
-        .d-table td { padding: 11px 10px; border-bottom: 1px solid var(--d-line); font-size: 13.5px; vertical-align: middle; white-space: nowrap; }
-        .d-table tbody tr:last-child td { border-bottom: 0; }
-        .d-table tbody tr { transition: background .15s; }
-        .d-table tbody tr:hover { background: #f8fafc; }
-        .d-table .inv { font-weight: 600; color: var(--d-blue); }
-        .d-table .co { display: flex; align-items: center; gap: 10px; max-width: 230px; }
-        .d-table .co span { overflow: hidden; text-overflow: ellipsis; }
-        .d-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--d-blue); background: var(--d-blue-soft); border-radius: 10px; padding: 7px 12px; text-decoration: none; }
-        .d-btn:hover { background: #dbe6ff; color: var(--d-blue); }
-        .d-empty { color: var(--d-muted); font-size: 13.5px; padding: 18px 0; text-align: center; }
-
-        @media (max-width: 991.98px) {
-            .dash-hero { padding: 22px 20px; }
-            .dash-hero-stats { justify-content: flex-start; margin-top: 18px; }
-            .dash-hero-stat { flex: 1 1 140px; min-width: 0; }
-            .mini-stats { grid-template-columns: 1fr; }
+        @media (max-width: 1199.98px) {
+            .ov-sum { grid-template-columns: repeat(2, 1fr); }
+            .ov-sum > div { border-left: 0; border-top: 1px solid var(--line-2); }
+            .ov-sum > div:first-child { grid-column: 1 / -1; border-top: 0; }
         }
     </style>
 @endsection
@@ -147,222 +93,235 @@
 @section('content')
     @php
         $cur = $dash['currency'];
-        $m = fn ($v) => number_format($v, 2);
-        $whole = fn ($v) => number_format($v, 0);
-        $short = function ($v) {
-            $a = abs($v);
-            return $a >= 1000000 ? number_format($v / 1000000, 2).'M' : ($a >= 1000 ? number_format($v / 1000, 1).'k' : number_format($v, 0));
-        };
-        $chip = function (?float $pct, string $suffix = '') {
-            if ($pct === null) {
-                return '<span class="chip chip-flat">No comparison</span>';
-            }
-            $up = $pct >= 0;
-            return '<span class="chip '.($up ? 'chip-up' : 'chip-down').'"><i class="mdi mdi-arrow-'.($up ? 'up' : 'down').'"></i>'
-                .number_format(abs($pct), 1).'%'.($suffix ? ' <span style="font-weight:500;opacity:.8">'.$suffix.'</span>' : '').'</span>';
-        };
-        $palette = [['#e8efff', '#1f5bd6'], ['#e0f7f6', '#0b8f8e'], ['#fef3e2', '#b45309'], ['#ffe8ee', '#be123c'], ['#efe9ff', '#6d28d9'], ['#e6f4ea', '#15803d']];
-        $avatar = function (string $name) use ($palette) {
-            $clean = trim(preg_replace('/[^A-Za-z0-9 ]+/', ' ', $name));
-            $parts = array_values(array_filter(explode(' ', $clean)));
-            $ini = strtoupper(substr($parts[0] ?? '?', 0, 1).substr($parts[1] ?? '', 0, 1));
-            [$bg, $fg] = $palette[crc32($name) % count($palette)];
-            return '<span class="avatar" style="background:'.$bg.';color:'.$fg.'">'.e($ini).'</span>';
-        };
+        $t = $dash['totals'];
+        $mo = $dash['month'];
+        $f2 = fn ($v) => number_format($v, 2);
+        $f0 = fn ($v) => number_format($v, 0);
+        $pct = fn ($a, $b) => $b > 0 ? ($a - $b) / $b * 100 : null;
+        $moChange = $pct($mo['total'], $mo['last']);
         $year = $dash['year'];
-        $month = $dash['month'];
-        $hour = (int) $dash['now']->format('G');
-        $greeting = $hour < 12 ? 'Good morning' : ($hour < 18 ? 'Good afternoon' : 'Good evening');
-        $shareColors = ['#1f5bd6', '#0ea5a4', '#f59e0b', '#e11d48', '#7c3aed', '#16a34a', '#cbd5e1'];
-        $share = $dash['top_companies']->map(fn ($c) => ['name' => $c['name'], 'total' => round($c['total'], 2)])->values()->all();
-        if ($dash['others_total'] > 0) {
-            $share[] = ['name' => 'Other companies', 'total' => round($dash['others_total'], 2)];
-        }
-        $maxTop = max(1, $dash['top_companies']->max('total') ?? 1);
+        $past = $dash['months']->reject(fn ($m) => $m['future']);
     @endphp
 
-    <div class="container-fluid dash">
-        {{-- Hero --}}
-        <div class="dash-hero">
-            <div class="row align-items-center">
-                <div class="col-lg-5">
-                    <div class="dash-eyebrow">MDM Derma · Sales overview</div>
-                    <h1>{{ $greeting }}{{ auth()->user() ? ', '.\Illuminate\Support\Str::of(auth()->user()->name)->before(' ') : '' }}</h1>
-                    <div class="sub">{{ $dash['now']->format('l, d F Y') }} &nbsp;·&nbsp; figures from {{ $year['count'] }} invoices this year</div>
+    <div class="container-fluid ov">
+        <div class="ov-head">
+            <div>
+                <h1>Sales overview</h1>
+                <p>Tax invoices issued in {{ $year }} · amounts in {{ $cur }} incl. 5% VAT unless stated</p>
+            </div>
+            <div class="ov-tools">
+                <div class="ov-years">
+                    @foreach ($dash['years']->take(4)->sort() as $y)
+                        <a href="{{ route('/', ['year' => $y]) }}" class="{{ $y === $year ? 'on' : '' }}">{{ $y }}</a>
+                    @endforeach
                 </div>
-                <div class="col-lg-7">
-                    <div class="dash-hero-stats">
-                        <div class="dash-hero-stat">
-                            <div class="k">Sales {{ $dash['now']->year }} (incl. VAT)</div>
-                            <div class="v num"><small>{{ $cur }}</small>{{ $whole($year['total']) }}</div>
-                            <div class="mt-1">{!! $chip($year['change'], 'vs last year') !!}</div>
-                        </div>
-                        <div class="dash-hero-stat">
-                            <div class="k">Average invoice</div>
-                            <div class="v num"><small>{{ $cur }}</small>{{ $whole($year['average']) }}</div>
-                            <div class="mt-1"><span class="chip">{{ $dash['active_companies'] }} active companies</span></div>
-                        </div>
-                        <div class="dash-hero-stat">
-                            <div class="k">After credit notes</div>
-                            <div class="v num"><small>{{ $cur }}</small>{{ $whole($year['after_credits']) }}</div>
-                            <div class="mt-1"><span class="chip">{{ $year['credits_count'] }} credit notes</span></div>
-                        </div>
-                    </div>
-                </div>
+                <a class="ov-link" href="{{ route('statement.index') }}">Statement of accounts</a>
+                <a class="ov-link" href="{{ route('invoice.create') }}">New invoice</a>
             </div>
         </div>
 
-        {{-- KPI cards --}}
-        <div class="row">
-            @php
-                $kpis = [
-                    ['id' => 'spark-month', 'label' => 'Sales this month', 'value' => $month['total'], 'icon' => 'mdi-calendar-month-outline', 'tone' => 't-blue', 'chip' => $chip($month['change'], 'vs last month'), 'foot' => $month['count'].' invoices in '.$dash['now']->format('F')],
-                    ['id' => 'spark-net', 'label' => 'Sales without VAT · '.$dash['now']->year, 'value' => $year['net'], 'icon' => 'mdi-cash-multiple', 'tone' => 't-teal', 'chip' => '<span class="chip chip-flat">'.$year['count'].' invoices</span>', 'foot' => 'Average '.$cur.' '.$whole($year['average']).' per invoice'],
-                    ['id' => 'spark-vat', 'label' => 'VAT collected · '.$dash['now']->year, 'value' => $year['vat'], 'icon' => 'mdi-percent-outline', 'tone' => 't-amber', 'chip' => '<span class="chip chip-flat">5% rated</span>', 'foot' => 'Due to FTA on this year\'s sales'],
-                    ['id' => 'spark-credits', 'label' => 'Credit notes · '.$dash['now']->year, 'value' => $year['credits'], 'icon' => 'mdi-file-undo-outline', 'tone' => 't-rose', 'chip' => '<span class="chip chip-flat">'.$year['credits_count'].' notes</span>', 'foot' => $year['total'] > 0 ? number_format($year['credits'] / $year['total'] * 100, 1).'% of sales returned' : '—'],
-                ];
-            @endphp
-            @foreach ($kpis as $k)
-                <div class="col-md-6 col-xl-3">
-                    <div class="d-card kpi">
-                        <div class="kpi-top">
-                            <div class="kpi-icon {{ $k['tone'] }}"><i class="mdi {{ $k['icon'] }}"></i></div>
-                            {!! $k['chip'] !!}
-                        </div>
-                        <div class="kpi-label">{{ $k['label'] }}</div>
-                        <div class="kpi-value num"><small>{{ $cur }}</small>{{ $m($k['value']) }}</div>
-                        <div class="kpi-foot">{{ $k['foot'] }}</div>
-                        <div class="kpi-spark" id="{{ $k['id'] }}"></div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-
-        {{-- Chart + share --}}
-        <div class="row">
-            <div class="col-xl-8">
-                <div class="d-card">
-                    <div class="d-card-body">
-                        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
-                            <div>
-                                <h4 class="d-card-title">Monthly sales</h4>
-                                <div class="d-card-sub">Last 12 months · invoices incl. VAT, credit notes deducted</div>
-                            </div>
-                            <div class="legend mt-1">
-                                <span><i style="background:#1f5bd6"></i>Without VAT</span>
-                                <span><i style="background:#7fb0ff"></i>VAT</span>
-                                <span><i style="background:#f43f5e"></i>Credit notes</span>
-                            </div>
-                        </div>
-                        <div class="mini-stats">
-                            <div class="mini-stat">
-                                <div class="k">This month</div>
-                                <div class="v num">{{ $cur }} {{ $short($month['total']) }}</div>
-                            </div>
-                            <div class="mini-stat">
-                                <div class="k">Last month</div>
-                                <div class="v num">{{ $cur }} {{ $short($month['last_total']) }}</div>
-                            </div>
-                            <div class="mini-stat">
-                                <div class="k">Best month</div>
-                                @php $best = $dash['months']->sortByDesc('total')->first(); @endphp
-                                <div class="v num">{{ $best && $best['total'] > 0 ? $best['label'] : '—' }}</div>
-                            </div>
-                        </div>
-                        <div id="sales-chart" dir="ltr" style="min-height: 400px;"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-4">
-                <div class="d-card">
-                    <div class="d-card-body">
-                        <h4 class="d-card-title">Sales by company</h4>
-                        <div class="d-card-sub">Share of {{ $dash['now']->year }} sales</div>
-                        @if (count($share))
-                            <div id="share-chart" dir="ltr" class="my-2" style="min-height: 240px;"></div>
-                            @foreach ($share as $i => $s)
-                                <div class="share-row">
-                                    <span class="dot" style="background: {{ $shareColors[$i] ?? '#cbd5e1' }}"></span>
-                                    <span class="name" title="{{ $s['name'] }}">{{ $s['name'] }}</span>
-                                    <span class="pct num">{{ $year['total'] > 0 ? number_format($s['total'] / $year['total'] * 100, 1) : 0 }}%</span>
-                                </div>
-                            @endforeach
+        {{-- Year summary --}}
+        <div class="ov-panel">
+            <div class="ov-sum">
+                <div>
+                    <div class="k">Sales {{ $year }}</div>
+                    <div class="v fig">{{ $f2($t['total']) }}<span class="c">{{ $cur }}</span></div>
+                    <div class="n">
+                        @if ($t['change'] === null)
+                            No sales in {{ $dash['prev_label'] }} to compare
                         @else
-                            <div class="d-empty">No invoices this year yet.</div>
+                            <span class="{{ $t['change'] >= 0 ? 'pos' : 'neg' }}">{{ $t['change'] >= 0 ? '+' : '−' }}{{ number_format(abs($t['change']), 1) }}%</span>
+                            on {{ $dash['prev_label'] }} ({{ $f0($t['prev']) }})
                         @endif
                     </div>
                 </div>
+                <div>
+                    <div class="k">Without VAT</div>
+                    <div class="v fig">{{ $f2($t['net']) }}</div>
+                    <div class="n">{{ $t['count'] }} invoices</div>
+                </div>
+                <div>
+                    <div class="k">VAT</div>
+                    <div class="v fig">{{ $f2($t['vat']) }}</div>
+                    <div class="n">Output tax for the year</div>
+                </div>
+                <div>
+                    <div class="k">Credit notes</div>
+                    <div class="v fig">{{ $t['credits'] > 0 ? '−' : '' }}{{ $f2($t['credits']) }}</div>
+                    <div class="n">{{ $t['credits_count'] }} {{ \Illuminate\Support\Str::plural('note', $t['credits_count']) }}</div>
+                </div>
+                <div>
+                    <div class="k">After credit notes</div>
+                    <div class="v fig">{{ $f2($t['after']) }}</div>
+                    <div class="n">Average invoice {{ $f0($t['average']) }}</div>
+                </div>
             </div>
         </div>
 
-        {{-- Latest invoices + ranking --}}
-        <div class="row">
+        <div class="ov-row">
             <div class="col-xl-8">
-                <div class="d-card">
-                    <div class="d-card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div>
-                                <h4 class="d-card-title">Latest invoices</h4>
-                                <div class="d-card-sub">The 8 most recent tax invoices</div>
-                            </div>
-                            <a href="{{ route('invoice.index') }}" class="d-btn">All invoices <i class="mdi mdi-arrow-right"></i></a>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="d-table">
-                                <thead>
-                                    <tr>
-                                        <th>Invoice</th>
-                                        <th>Company</th>
-                                        <th>Date</th>
-                                        <th class="text-end">VAT</th>
-                                        <th class="text-end">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse ($dash['latest'] as $inv)
-                                        <tr>
-                                            <td><a class="inv" href="{{ route('invoice.show', $inv['id']) }}">{{ $inv['number'] }}</a></td>
-                                            <td><div class="co">{!! $avatar($inv['company']) !!}<span title="{{ $inv['company'] }}">{{ $inv['company'] }}</span></div></td>
-                                            <td class="text-muted">{{ $inv['date']->format('d M Y') }}</td>
-                                            <td class="text-end text-muted num">{{ $m($inv['vat']) }}</td>
-                                            <td class="text-end num" style="font-weight:700">{{ $cur }} {{ $m($inv['total']) }}</td>
-                                        </tr>
-                                    @empty
-                                        <tr><td colspan="5" class="d-empty">No invoices yet.</td></tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
+                <div class="ov-panel">
+                    <div class="ov-panel-h">
+                        <h2>Monthly sales, {{ $year }}</h2>
+                        <span>Incl. VAT</span>
+                    </div>
+                    <div class="ov-panel-b" style="padding-top: 6px;">
+                        <div id="ov-chart" dir="ltr" style="min-height: 370px;"></div>
                     </div>
                 </div>
             </div>
-
             <div class="col-xl-4">
-                <div class="d-card">
-                    <div class="d-card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-1">
-                            <div>
-                                <h4 class="d-card-title">Top companies</h4>
-                                <div class="d-card-sub">{{ $dash['now']->year }} · {{ $dash['companies'] }} companies in total</div>
-                            </div>
-                            <a href="{{ route('statement.index') }}" class="d-btn" title="Statement of Accounts"><i class="mdi mdi-file-document-outline"></i></a>
+                <div class="ov-panel">
+                    <div class="ov-panel-h">
+                        <h2>{{ $mo['name'] }}</h2>
+                        <span>Month to date</span>
+                    </div>
+                    <div class="ov-panel-b">
+                        <div class="ov-big fig">{{ $f2($mo['total']) }} <span style="font-size: 14px; color: var(--mute); font-weight: 500;">{{ $cur }}</span></div>
+                        <div class="ov-sub">
+                            @if ($moChange === null)
+                                Nothing invoiced in {{ $mo['last_name'] }}
+                            @else
+                                <span class="{{ $moChange >= 0 ? 'pos' : 'neg' }}">{{ $moChange >= 0 ? '+' : '−' }}{{ number_format(abs($moChange), 1) }}%</span> on {{ $mo['last_name'] }}
+                            @endif
                         </div>
-                        @forelse ($dash['top_companies'] as $c)
-                            <div class="rank-row">
-                                {!! $avatar($c['name']) !!}
-                                <div class="info">
-                                    <div class="name" title="{{ $c['name'] }}">{{ $c['name'] }}</div>
-                                    <div class="bar"><span style="width: {{ max(3, round($c['total'] / $maxTop * 100)) }}%"></span></div>
-                                    <div class="meta mt-1">{{ $c['count'] }} invoices</div>
-                                </div>
-                                <div class="amt num">{{ $cur }} {{ $short($c['total']) }}</div>
-                            </div>
-                        @empty
-                            <div class="d-empty">No invoices this year yet.</div>
-                        @endforelse
+                        <dl class="ov-dl mt-3">
+                            <div><dt>Invoices</dt><dd class="fig">{{ $mo['count'] }}</dd></div>
+                            <div><dt>Companies invoiced</dt><dd class="fig">{{ $mo['companies'] }}</dd></div>
+                            <div><dt>{{ $mo['last_name'] }} total</dt><dd class="fig">{{ $f2($mo['last']) }}</dd></div>
+                        </dl>
+                        <hr class="ov-sep">
+                        <div class="ov-cap">{{ $year }} so far</div>
+                        <dl class="ov-dl">
+                            <div><dt>Active companies</dt><dd class="fig">{{ $dash['companies_active'] }} <span style="color: var(--mute); font-weight: 400;">of {{ $dash['companies_all'] }}</span></dd></div>
+                            <div><dt>Average invoice</dt><dd class="fig">{{ $f2($t['average']) }}</dd></div>
+                            @php $best = $past->sortByDesc('total')->first(); @endphp
+                            <div><dt>Best month</dt><dd>{{ $best && $best['total'] > 0 ? $best['name'].' · '.$f0($best['total']) : '—' }}</dd></div>
+                        </dl>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="ov-row">
+            <div class="col-xl-7">
+                <div class="ov-panel">
+                    <div class="ov-panel-h">
+                        <h2>Month by month</h2>
+                        <span>{{ $year }}</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="ov-t fig">
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th class="r">Invoices</th>
+                                    <th class="r">Without VAT</th>
+                                    <th class="r">VAT</th>
+                                    <th class="r">Total</th>
+                                    <th class="r">Credit notes</th>
+                                    <th class="r">Net</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($dash['months'] as $m)
+                                    <tr class="{{ $m['future'] ? 'dim' : '' }} {{ $m['current'] ? 'now' : '' }}">
+                                        <td>{{ $m['name'] }}</td>
+                                        @if ($m['future'])
+                                            <td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td>
+                                        @else
+                                            <td class="r">{{ $m['count'] }}</td>
+                                            <td class="r">{{ $f2($m['net']) }}</td>
+                                            <td class="r">{{ $f2($m['vat']) }}</td>
+                                            <td class="r">{{ $f2($m['total']) }}</td>
+                                            <td class="r {{ $m['credits'] > 0 ? 'neg' : '' }}">{{ $m['credits'] > 0 ? '−'.$f2($m['credits']) : '0.00' }}</td>
+                                            <td class="r" style="font-weight: 600;">{{ $f2($m['after']) }}</td>
+                                        @endif
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td>Total</td>
+                                    <td class="r">{{ $t['count'] }}</td>
+                                    <td class="r">{{ $f2($t['net']) }}</td>
+                                    <td class="r">{{ $f2($t['vat']) }}</td>
+                                    <td class="r">{{ $f2($t['total']) }}</td>
+                                    <td class="r {{ $t['credits'] > 0 ? 'neg' : '' }}">{{ $t['credits'] > 0 ? '−'.$f2($t['credits']) : '0.00' }}</td>
+                                    <td class="r">{{ $f2($t['after']) }}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-5">
+                <div class="ov-panel">
+                    <div class="ov-panel-h">
+                        <h2>Top companies</h2>
+                        <span>{{ $year }} · by sales</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="ov-t fig">
+                            <thead>
+                                <tr>
+                                    <th>Company</th>
+                                    <th class="r">Inv.</th>
+                                    <th class="r">Sales</th>
+                                    <th class="r">Share</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($dash['companies'] as $c)
+                                    @php $share = $t['total'] > 0 ? $c['total'] / $t['total'] * 100 : 0; @endphp
+                                    <tr>
+                                        <td class="co" title="{{ $c['name'] }}">{{ $c['name'] }}</td>
+                                        <td class="r">{{ $c['count'] }}</td>
+                                        <td class="r">{{ $f2($c['total']) }}</td>
+                                        <td class="r">{{ number_format($share, 1) }}%<span class="ov-share"><i style="width: {{ min(100, round($share)) }}%"></i></span></td>
+                                    </tr>
+                                @empty
+                                    <tr><td colspan="4" class="ov-empty">No invoices in {{ $year }}.</td></tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ov-panel">
+            <div class="ov-panel-h">
+                <h2>Latest invoices</h2>
+                <a href="{{ route('invoice.index') }}">All invoices</a>
+            </div>
+            <div class="table-responsive">
+                <table class="ov-t fig">
+                    <thead>
+                        <tr>
+                            <th>Invoice</th>
+                            <th>Date</th>
+                            <th>Company</th>
+                            <th class="r">Without VAT</th>
+                            <th class="r">VAT</th>
+                            <th class="r">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($dash['latest'] as $inv)
+                            <tr>
+                                <td><a href="{{ route('invoice.show', $inv['id']) }}">{{ $inv['number'] }}</a></td>
+                                <td>{{ $inv['date']->format('d/m/Y') }}</td>
+                                <td class="co" title="{{ $inv['company'] }}">{{ $inv['company'] }}</td>
+                                <td class="r">{{ $f2($inv['net']) }}</td>
+                                <td class="r">{{ $f2($inv['vat']) }}</td>
+                                <td class="r" style="font-weight: 600;">{{ $f2($inv['total']) }}</td>
+                            </tr>
+                        @empty
+                            <tr><td colspan="6" class="ov-empty">No invoices yet.</td></tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -370,105 +329,46 @@
 @section('scripts')
     <script>
         (function () {
-            if (typeof ApexCharts === 'undefined') {
+            var el = document.getElementById('ov-chart');
+            if (!el || typeof ApexCharts === 'undefined') {
                 return;
             }
             var months = @json($dash['months']);
-            var share = @json($share);
-            var shareColors = @json($shareColors);
             var cur = @json($cur);
-            var font = 'Inter, system-ui, sans-serif';
             var money = function (v) {
-                return cur + ' ' + Number(v).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                return Number(v).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ' + cur;
             };
-            var compact = function (v) {
-                var a = Math.abs(v);
-                return a >= 1e6 ? (v / 1e6).toFixed(1) + 'M' : a >= 1e3 ? (v / 1e3).toFixed(0) + 'k' : Math.round(v);
-            };
-            var labels = months.map(function (m) { return m.label; });
-
-            function spark(id, data, color) {
-                var el = document.getElementById(id);
-                if (!el) {
-                    return;
-                }
-                new ApexCharts(el, {
-                    chart: { type: 'area', height: 56, sparkline: { enabled: true }, animations: { speed: 500 } },
-                    series: [{ name: 'Amount', data: data }],
-                    stroke: { curve: 'smooth', width: 2.2 },
-                    fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: .35, opacityTo: 0, stops: [0, 95] } },
-                    colors: [color],
-                    tooltip: {
-                        fixed: { enabled: false },
-                        x: { formatter: function (v, o) { return labels[o.dataPointIndex]; } },
-                        y: { title: { formatter: function () { return ''; } }, formatter: money },
-                        marker: { show: false }
-                    }
-                }).render();
-            }
-            spark('spark-month', months.map(function (m) { return m.total; }), '#1f5bd6');
-            spark('spark-net', months.map(function (m) { return m.net; }), '#0ea5a4');
-            spark('spark-vat', months.map(function (m) { return m.vat; }), '#f59e0b');
-            spark('spark-credits', months.map(function (m) { return m.credits; }), '#e11d48');
-
-            new ApexCharts(document.querySelector('#sales-chart'), {
-                chart: { type: 'bar', height: 400, stacked: true, toolbar: { show: false }, fontFamily: font, animations: { speed: 600 } },
-                series: [
-                    { name: 'Without VAT', data: months.map(function (m) { return m.net; }) },
-                    { name: 'VAT', data: months.map(function (m) { return m.vat; }) },
-                    { name: 'Credit notes', data: months.map(function (m) { return -m.credits; }) }
-                ],
-                colors: ['#1f5bd6', '#7fb0ff', '#f43f5e'],
-                plotOptions: { bar: { columnWidth: '46%', borderRadius: 6, borderRadiusApplication: 'end', borderRadiusWhenStacked: 'last' } },
+            new ApexCharts(el, {
+                chart: { type: 'bar', height: 370, toolbar: { show: false }, fontFamily: '"IBM Plex Sans", "Segoe UI", sans-serif', animations: { enabled: false } },
+                series: [{ name: 'Sales', data: months.map(function (m) { return m.future ? null : m.total; }) }],
+                colors: [function (o) { return months[o.dataPointIndex].current ? '#1c4fa1' : '#9db6dd'; }],
+                plotOptions: { bar: { columnWidth: '52%', borderRadius: 0 } },
                 dataLabels: { enabled: false },
                 legend: { show: false },
-                states: { hover: { filter: { type: 'darken', value: .9 } } },
+                states: { hover: { filter: { type: 'darken', value: .85 } }, active: { filter: { type: 'none' } } },
                 xaxis: {
-                    categories: labels.map(function (l) { return l.split(' ')[0]; }),
-                    axisBorder: { show: false }, axisTicks: { show: false },
-                    labels: { style: { colors: '#94a3b8', fontSize: '12px' } }
+                    categories: months.map(function (m) { return m.label; }),
+                    axisBorder: { color: '#d5d9de' }, axisTicks: { show: false },
+                    labels: { style: { colors: '#6b7280', fontSize: '12px' } }
                 },
-                yaxis: { labels: { formatter: compact, style: { colors: '#94a3b8', fontSize: '12px' } } },
-                grid: { borderColor: '#eef2f7', strokeDashArray: 4, padding: { left: 4, right: 4 } },
+                yaxis: {
+                    tickAmount: 4,
+                    labels: {
+                        style: { colors: '#6b7280', fontSize: '12px' },
+                        formatter: function (v) { return v >= 1000 ? Math.round(v / 1000) + 'k' : Math.round(v); }
+                    }
+                },
+                grid: { borderColor: '#eef0f2', padding: { left: 0, right: 0 } },
                 tooltip: {
-                    shared: true, intersect: false,
-                    y: { formatter: function (v) { return money(Math.abs(v)); } },
+                    y: { formatter: function (v) { return money(v); } },
                     x: {
                         formatter: function (v, o) {
-                            var mo = months[o.dataPointIndex];
-                            return mo.label + ' · ' + mo.count + ' invoices · ' + money(mo.total);
+                            var m = months[o.dataPointIndex];
+                            return m.name + ' · ' + m.count + ' invoices';
                         }
                     }
                 }
             }).render();
-
-            var shareEl = document.querySelector('#share-chart');
-            if (shareEl && share.length) {
-                var total = share.reduce(function (s, x) { return s + x.total; }, 0);
-                new ApexCharts(shareEl, {
-                    chart: { type: 'donut', height: 240, fontFamily: font },
-                    series: share.map(function (s) { return s.total; }),
-                    labels: share.map(function (s) { return s.name; }),
-                    colors: shareColors.slice(0, share.length),
-                    legend: { show: false },
-                    dataLabels: { enabled: false },
-                    stroke: { width: 3, colors: ['#fff'] },
-                    plotOptions: {
-                        pie: {
-                            donut: {
-                                size: '74%',
-                                labels: {
-                                    show: true,
-                                    value: { fontSize: '20px', fontWeight: 700, color: '#0f172a', offsetY: 4, formatter: function (v) { return cur + ' ' + compact(Number(v)); } },
-                                    name: { fontSize: '12px', color: '#64748b', offsetY: -6 },
-                                    total: { show: true, label: 'Total sales', color: '#64748b', fontSize: '12px', formatter: function () { return cur + ' ' + compact(total); } }
-                                }
-                            }
-                        }
-                    },
-                    tooltip: { y: { formatter: money } }
-                }).render();
-            }
         })();
     </script>
 @endsection
