@@ -2,21 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Company;
-use App\Models\Invoice;
-use App\Models\Product;
-use Illuminate\Http\Request;
+use App\Support\DashboardData;
 
 class HomeController extends Controller
 {
+    public function index()
+    {
+        $dash = DashboardData::make();
 
-
-    public function index(){
-        $companies = Company::count();
-        $products = Product::count();
-        $totalPrice = Product::sum('price');
-
-    return view('home' , compact('companies','products','totalPrice'));
-
+        return view('home', compact('dash'));
     }
 }
