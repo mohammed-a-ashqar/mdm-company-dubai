@@ -31,6 +31,9 @@ class DashboardData
         $lastMonth = $inMonth($invoices, $now->copy()->subMonthNoOverflow());
         $thisYear = $inYear($invoices, $now->year);
         $creditsYear = $inYear($credits, $now->year);
+        // Same stretch of last year (1 Jan → same day), for a fair year-to-date comparison.
+        $lastYtdEnd = $now->copy()->subYearNoOverflow()->endOfDay();
+        $lastYtd = $inYear($invoices, $now->year - 1)->filter(fn ($r) => $r['date']->lte($lastYtdEnd));
 
         $months = collect(range(11, 0))->map(function ($back) use ($now, $invoices, $credits, $inMonth) {
             $m = $now->copy()->startOfMonth()->subMonthsNoOverflow($back);
@@ -40,14 +43,19 @@ class DashboardData
                 'label' => $m->format('M Y'),
                 'net' => round($inv->sum('net'), 2),
                 'vat' => round($inv->sum('vat'), 2),
+                'total' => round($inv->sum('total'), 2),
                 'credits' => round($inMonth($credits, $m)->sum('total'), 2),
                 'count' => $inv->count(),
             ];
         })->values();
 
-        $topCompanies = $thisYear->groupBy('company')
+        $byCompany = $thisYear->groupBy('company')
             ->map(fn ($rows, $name) => ['name' => $name, 'total' => $rows->sum('total'), 'count' => $rows->count()])
-            ->sortByDesc('total')->take(6)->values();
+            ->sortByDesc('total')->values();
+        $topCompanies = $byCompany->take(6)->values();
+        $othersTotal = $byCompany->slice(6)->sum('total');
+        $yearTotal = $thisYear->sum('total');
+        $lastYtdTotal = $lastYtd->sum('total');
 
         $monthTotal = $thisMonth->sum('total');
         $lastTotal = $lastMonth->sum('total');
@@ -62,7 +70,10 @@ class DashboardData
                 'last_total' => $lastTotal,
             ],
             'year' => [
-                'total' => $thisYear->sum('total'),
+                'total' => $yearTotal,
+                'last_ytd' => $lastYtdTotal,
+                'change' => $lastYtdTotal > 0 ? ($yearTotal - $lastYtdTotal) / $lastYtdTotal * 100 : null,
+                'average' => $thisYear->count() ? $yearTotal / $thisYear->count() : 0,
                 'net' => $thisYear->sum('net'),
                 'vat' => $thisYear->sum('vat'),
                 'count' => $thisYear->count(),
@@ -75,6 +86,7 @@ class DashboardData
             'active_companies' => $thisYear->pluck('company')->unique()->count(),
             'months' => $months,
             'top_companies' => $topCompanies,
+            'others_total' => $othersTotal,
             'latest' => $invoices->sortByDesc(fn ($r) => $r['date']->timestamp * 100000 + $r['id'])->take(8)->values(),
         ];
     }
